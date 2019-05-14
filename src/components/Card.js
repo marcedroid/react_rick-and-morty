@@ -5,11 +5,8 @@ class Card extends Component {
     return (
       <div className="card">
         <div className="card-image">
-          <figure className="image is-4by3">
-            <img
-              src="https://bulma.io/images/placeholders/1280x960.png"
-              alt="Personaje"
-            />
+          <figure className="image is-square">
+            <img src={this.props.image} alt="Personaje" />
           </figure>
         </div>
         <div className="card-content">
@@ -17,12 +14,39 @@ class Card extends Component {
             <table className="table is-fullwidth">
               <tbody>
                 <tr>
-                  <td>Name</td>
-                  <td>Desc</td>
+                  <th>
+                    <small>Name</small>
+                  </th>
+                  <td>
+                    <small>{this.props.name}</small>
+                  </td>
                 </tr>
+
                 <tr>
-                  <td>Name</td>
-                  <td>Desc</td>
+                  <th>
+                    <small>Species</small>
+                  </th>
+                  <td>
+                    <small>{this.props.species}</small>
+                  </td>
+                </tr>
+
+                <tr>
+                  <th>
+                    <small>Gender</small>
+                  </th>
+                  <td>
+                    <small>{this.props.gender}</small>
+                  </td>
+                </tr>
+
+                <tr>
+                  <th>
+                    <small>Origin</small>
+                  </th>
+                  <td>
+                    <small>{this.props.origin.name}</small>
+                  </td>
                 </tr>
               </tbody>
             </table>

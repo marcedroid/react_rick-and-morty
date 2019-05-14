@@ -8,7 +8,6 @@ import './global.css';
 import Header from './components/Header';
 import Progress from './components/Progress';
 import Card from './components/Card';
-import { async } from 'q';
 
 class App extends Component {
   constructor(props) {
@@ -16,7 +15,6 @@ class App extends Component {
     this.state = {
       loading: true,
       error: false,
-      page: 1,
       data: {
         info: {},
         results: []
@@ -25,18 +23,18 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.fetchCharactes();
+    const apiURL = `https://rickandmortyapi.com/api/character`;
+    this.fetchCharactes(apiURL);
   }
 
-  fetchCharactes = async () => {
-    const apiURL = 'https://rickandmortyapi.com/api/character/?page=';
+  fetchCharactes = async page => {
     this.setState({
       loading: true,
       error: false
     });
 
     try {
-      const response = await fetch(`${apiURL}${this.state.page}`);
+      const response = await fetch(page);
       const data = await response.json();
 
       this.setState({
@@ -54,20 +52,50 @@ class App extends Component {
     }
   };
 
+  handleNext = event => {
+    event.preventDefault();
+    this.fetchCharactes(this.state.data.info.next);
+  };
+
   render() {
     return (
       <Fragment>
         <Header />
 
-        {this.state.loading && <Progress />}
-
         <div className="hero">
           <div className="hero-body">
             <div className="container">
-              <div className="columns">
-                <div className="column is-one-third">Card</div>
-              </div>
+              {this.state.error && (
+                <h2 className="title has-text-danger">Error!</h2>
+              )}
+
+              {!this.state.error && (
+                <div className="columns is-multiline">
+                  {this.state.data.results.map(character => {
+                    return (
+                      <div key={character.id} className="column is-one-third">
+                        <Card {...character} />
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
+
+            {this.state.loading && <Progress />}
+
+            {!this.state.loading && this.state.data.info.next && (
+              <div className="section">
+                <div className="container">
+                  <div
+                    onClick={this.handleNext}
+                    className="button is-large is-primary is-fullwidth"
+                  >
+                    Load More
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </Fragment>
